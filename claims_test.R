@@ -29,7 +29,7 @@ dtest <- xgb.DMatrix(data=test, label=Insurance$Claims[-idx])
 setinfo(dtrain, "base_margin", log(Insurance$Holders[idx]))
 setinfo(dtest, "base_margin", log(Insurance$Holders[-idx]))
 
-params <- list(max_depth=3, eta=0.1, nthread = 4, silent=1, objective='count:poisson')
+params <- list(max_depth=3, eta=0.1, nthread=4, silent=1, objective='count:poisson')
 bst <- xgboost(params=params, data=dtrain, nrounds=100, weight=Insurance$Holders[idx])
 
 params_constrained <- params
@@ -74,11 +74,11 @@ rgbm_mon <- gbm(Claims ~ District + Group + Age + offset(log(Holders)),
 
 rpreds <- predict(rgbm, Insurance[-idx,], type='response')
 aggregate(rpreds ~ Age, data = cbind(Insurance[-idx,], rpreds), mean)
-plot(as.factor(Insurance[-idx,'Age']), rpreds/Insurance[-idx,'Holders'])
+plot(as.factor(Insurance[-idx,'Age']), rpreds)
 
 rpreds_mon <- predict(rgbm_mon, Insurance[-idx,], type='response')
 aggregate(rpreds_mon ~ Age, data = cbind(Insurance[-idx,], rpreds), mean)
-plot(as.factor(Insurance[-idx,'Age']), rpreds_mon/Insurance[-idx,'Holders'])
+plot(as.factor(Insurance[-idx,'Age']), rpreds_mon)
 
 #---------------------------------------------------------
 #
